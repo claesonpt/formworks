@@ -29,9 +29,11 @@ function whenReady(fn){if(document.readyState==='complete')setTimeout(fn,0);else
 var cached=null;try{cached=localStorage.getItem(CK)}catch(e){}
 var fresh=fetch(API+'?src=app&k='+K,{cache:'no-store'}).then(function(r){if(!r.ok)throw 0;return r.text()}).then(function(h){
   if(h.indexOf('/*FW_BOOT*/')<0)throw 0;try{localStorage.setItem(CK,h)}catch(e){}return h});
+// Newest version first; only fall back to the saved copy if the network is slow (3 s) or offline,
+// so updates show up on the very next open instead of one visit late.
 whenReady(function(){
-  if(cached){run(cached);return;}
-  fresh.then(run,function(){msg('Could not load FormWorks. Check your connection and refresh.')});
+  var t0=setTimeout(function(){if(cached)run(cached)},3000);
+  fresh.then(function(h){clearTimeout(t0);run(h)},function(){clearTimeout(t0);if(cached)run(cached);else msg('Could not load FormWorks. Check your connection and refresh.')});
 });
 })();
 </script></body></html>
