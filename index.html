@@ -1,0 +1,19 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>FormWorks</title><meta name="theme-color" content="#1F2A44">
+<link rel="manifest" href="manifest.json"><link rel="apple-touch-icon" href="icon-180.png">
+<meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="FormWorks">
+<style>body{margin:0;background:#1F2A44;color:#fff;font:16px system-ui;display:flex;align-items:center;justify-content:center;height:100vh}</style>
+</head><body><div id="m">Loading FormWorks…</div>
+<script>
+(function(){
+var API='https://script.google.com/macros/s/AKfycbwiazqORh4fnxAF-gSGfbym4K6_8NheEwRERf5AwenBiuc6SnK9J2wCoW-mtT9CBRnY/exec';
+var K='a490efd3e1',CK='fw_app_html_v1';
+var t=new URLSearchParams(location.search).get('t')||'';
+var head='<link rel="manifest" href="manifest.json"><link rel="apple-touch-icon" href="icon-180.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="FormWorks"><meta name="theme-color" content="#1F2A44">';
+function run(h){h=h.replace('<!--FW_HEAD-->',head).replace('/*FW_BOOT*/','window.FW_BOOT='+JSON.stringify({k:K,t:t,api:API})+';');document.open();document.write(h);document.close();}
+var c=null;try{c=localStorage.getItem(CK)}catch(e){}
+var f=fetch(API+'?src=app&k='+K).then(function(r){if(!r.ok)throw 0;return r.text()}).then(function(h){if(h.indexOf('/*FW_BOOT*/')<0)throw 0;try{localStorage.setItem(CK,h)}catch(e){}return h});
+if(c){run(c)}else{f.then(run,function(){document.getElementById('m').textContent='Could not load. Check your connection and refresh.'})}
+})();
+</script></body></html>
