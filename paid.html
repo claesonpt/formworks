@@ -9,12 +9,34 @@ h1{font-size:26px;margin:0 0 10px}
 p{color:#B9BEDA;margin:0 0 14px}
 .btn{display:inline-block;margin-top:10px;background:#E8A64A;color:#1F2A44;font-weight:700;text-decoration:none;padding:14px 22px;border-radius:12px}
 .small{font-size:14px}
+.spin{width:28px;height:28px;border:3px solid #2C3552;border-top-color:#E8A64A;border-radius:50%;margin:6px auto 16px;animation:s 1s linear infinite}
+@keyframes s{to{transform:rotate(360deg)}}
 </style></head><body><div class="w">
 <img class="logo" src="icon-180.png" alt="">
-<div id="ok"><h1>Payment received</h1><p>Thank you! Your FormWorks program unlocks within a moment, and you'll get a confirmation email.</p>
-<p class="small">Close this page and go back to the FormWorks app. If it still shows "One more step", tap <b>Already paid? Tap to check</b>.</p></div>
-<div id="no" hidden><h1>Payment canceled</h1><p>No charge was made. You can go back to the FormWorks app and tap <b>Pay now</b> whenever you're ready.</p></div>
-<a class="btn" href="./">Back to FormWorks</a>
+<div id="wait"><div class="spin"></div><h1>Confirming your payment…</h1><p>This takes a few seconds.</p></div>
+<div id="ok" hidden><h1>You're all set</h1><p>Payment received and your FormWorks program is <b>unlocked</b>. A confirmation email is on its way.</p>
+<p class="small">Close this page and open the FormWorks app. Your workouts are ready.</p></div>
+<div id="slow" hidden><h1>Payment received</h1><p>Your program will unlock within a few minutes, and you'll get a confirmation email.</p>
+<p class="small">Open the FormWorks app. If it still shows "One more step", tap <b>Already paid? Tap to check</b>.</p></div>
+<div id="no" hidden><h1>Payment canceled</h1><p>No charge was made. Go back to the FormWorks app and tap <b>Pay now</b> whenever you're ready.</p></div>
+<a class="btn" href="./">Open FormWorks</a>
 </div>
-<script>if(/[?&]canceled=1/.test(location.search)){document.getElementById('ok').hidden=true;document.getElementById('no').hidden=false;}</script>
+<script>
+(function(){
+var API='https://script.google.com/macros/s/AKfycbwiazqORh4fnxAF-gSGfbym4K6_8NheEwRERf5AwenBiuc6SnK9J2wCoW-mtT9CBRnY/exec';
+var q=new URLSearchParams(location.search),sid=q.get('session_id')||'';
+function show(id){['wait','ok','slow','no'].forEach(function(x){document.getElementById(x).hidden=(x!==id)})}
+if(q.get('canceled')){show('no');return}
+if(!/^cs_/.test(sid)){show('slow');return}
+var tries=0;
+(function check(){
+  tries++;
+  fetch(API,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({action:'confirm',session:sid})})
+    .then(function(r){return r.json()}).then(function(r){
+      if(r&&r.paid){show('ok');return}
+      if(tries<6)setTimeout(check,2500);else show('slow');
+    },function(){if(tries<6)setTimeout(check,2500);else show('slow')});
+})();
+})();
+</script>
 </body></html>
