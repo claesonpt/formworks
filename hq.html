@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Coach HQ</title>
+<meta name="apple-mobile-web-app-title" content="Coach HQ">
+<meta name="robots" content="noindex">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="icon" type="image/png" href="icon-192.png">
+<meta name="theme-color" content="#1F2A44">
+<style>
+  :root { --bg:#1F2A44; --tile:#4C4FA0; --gold:#E8A64A; --ink:#fff; --soft:#C9CFE0; }
+  * { box-sizing:border-box; }
+  body { margin:0; min-height:100vh; background:var(--bg); color:var(--ink);
+    font:16px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+    display:flex; align-items:center; justify-content:center; padding:24px 16px; }
+  .card { max-width:360px; width:100%; text-align:center; }
+  img { width:96px; height:96px; border-radius:22px; }
+  h1 { font-size:24px; margin:16px 0 4px; }
+  p { color:var(--soft); margin:0 0 20px; }
+  a.btn { display:block; background:var(--gold); color:#1F2A44; font-weight:700; text-decoration:none;
+    padding:14px; border-radius:12px; margin-bottom:24px; }
+  ol { text-align:left; color:var(--soft); padding-left:20px; margin:0; }
+  li { margin-bottom:6px; }
+  b { color:var(--ink); }
+</style>
+</head>
+<body>
+<div class="card">
+  <img src="icon-180.png" alt="FormWorks">
+  <h1>Coach HQ</h1>
+  <p id="msg">Save this page to your home screen to open Coach HQ in one tap.</p>
+  <a class="btn" id="go" href="https://claude.ai/artifact/JqqU18kJ2fAY8jR261MDra">Open Coach HQ</a>
+  <ol id="how">
+    <li>In Safari, tap the <b>Share</b> button.</li>
+    <li>Tap <b>Add to Home Screen</b>, then <b>Add</b>.</li>
+    <li>Open it from the new FormWorks icon. It goes straight to Coach HQ.</li>
+  </ol>
+</div>
+<script>
+  // The home-screen shortcut saves the address with ?go, so opening it later jumps straight to Coach HQ.
+  var HQ = 'https://claude.ai/artifact/JqqU18kJ2fAY8jR261MDra';
+  if (/[?&]go\b/.test(location.search)) {
+    document.getElementById('msg').textContent = 'Opening Coach HQ…';
+    document.getElementById('how').style.display = 'none';
+    location.replace(HQ);
+  } else {
+    try { history.replaceState(null, '', location.pathname + '?go'); } catch (e) {}
+  }
+</script>
+</body>
+</html>
